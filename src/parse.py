@@ -60,6 +60,20 @@ def init_praser() -> ArgumentParser:
         help=f"range of numbers  (default: {const.INT_MIN}, {const.INT_MAX})",
         metavar=("min", "max"),
     )
+    parser.add_argument(
+        "--exec-push_swap",
+        dest="exec_push_swap",
+        type=Path,
+        help="Path to your push_swap executable",
+        metavar="path",
+    )
+    parser.add_argument(
+        "--exec-checker",
+        dest="exec_checker",
+        type=Path,
+        help="Path to your checker executable",
+        metavar="path",
+    )
     return parser
 
 
@@ -73,6 +87,7 @@ def positive_int(string: str) -> int:
 def validate_arguments(parser: ArgumentParser, ret: Namespace) -> None:
     validate_range(parser, ret)
     validate_dir(parser, ret)
+    validate_exec(parser, ret)
 
 
 def validate_range(parser: ArgumentParser, ret: Namespace) -> None:
@@ -83,6 +98,13 @@ def validate_range(parser: ArgumentParser, ret: Namespace) -> None:
 def validate_dir(parser: ArgumentParser, ret: Namespace) -> None:
     if not ret.dir.is_dir():
         parser.error(f"argument -d: is not a directory: '{ret.dir}'")
+
+
+def validate_exec(parser: ArgumentParser, ret: Namespace) -> None:
+    if ret.exec_push_swap and not ret.exec_push_swap.exists():
+        parser.error(f"argument --exec-push_swap: does not exist '{ret.exec_push_swap}'")
+    if ret.exec_checker and not ret.exec_checker.exists():
+        parser.error(f"argument --exec-checker: does not exist '{ret.exec_checker}'")
 
 
 class PushSwapTesterHelpFormatter(RawTextHelpFormatter):

@@ -24,8 +24,8 @@ class Tester:
         self.max = range[1]
         self.num = min(self.max - self.min + 1, self.num)
         if kwargs.get("generate") is False:
-            self.push_swap = (dir / const.PUSH_SWAP_NAME).resolve()
-            self.checker = (dir / const.CHECKER_NAME).resolve()
+            self.push_swap = kwargs.get("exec_push_swap") or (dir / const.PUSH_SWAP_NAME).resolve()
+            self.checker = kwargs.get("exec_checker") or (dir / const.CHECKER_NAME).resolve()
             self.validate_executable(self.push_swap)
             self.validate_executable(self.checker)
             self.op_count: Counter[int] = Counter()
